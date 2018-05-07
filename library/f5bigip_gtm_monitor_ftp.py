@@ -28,29 +28,8 @@ description:
     - Configures a File Transfer Protocol (FTP) monitor.
 version_added: "2.4"
 author:
-    - "Eric Jacob (@erjac77)"
+    - "Gabriel Fortin (@gabrielfortin)"
 options:
-    adaptive:
-        description:
-            - Specifies whether the adaptive feature is enabled for this monitor.
-        choices: ['enabled', 'disabled']
-    adaptive_divergence_type:
-        description:
-            - Specifies whether the adaptive-divergence-value is relative or absolute.
-        choices: ['relative', 'absolute']
-    adaptive_divergence_value:
-        description:
-            - Specifies how far from mean latency each monitor probe is allowed to be.
-    adaptive_limit:
-        description:
-            - Specifies the hard limit, in milliseconds, which the probe is not allowed to exceed, regardless of the
-              divergence value.
-    adaptive_sampling_timespan:
-        description:
-            - Specifies the size of the sliding window, in seconds, which records probe history.
-    app_service:
-        description:
-            - Specifies the application service to which the object belongs.
     debug:
         description:
             - Specifies whether the monitor sends error messages and additional information to a log file created and
@@ -71,17 +50,16 @@ options:
     filename:
         description:
             - Specifies the full path and file name of the file that the system attempts to download.
+    ignore_down_response:
+        description:
+            - Specifies whether the monitor ignores a down response from the system it is monitoring.
+        default: disabled
+        choices: ['enabled', 'disabled']
     interval:
         description:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when either the resource
               is down or the status of the resource is unknown.
-        default: 5
-    manual_resume:
-        description:
-            - Specifies whether the system automatically changes the status of a resource to up at the next successful
-              monitor check.
-        default: disabled
-        choices: ['enabled', 'disabled']
+        default: 10
     mode:
         description:
             - Specifies the data transfer process (DTP) mode.
@@ -98,19 +76,20 @@ options:
     password:
         description:
             - Specifies the password, if the monitored target requires authentication.
+    probe_timeout:
+        description:
+            - Specifies the number of seconds after which the BIG-IP system times out the probe request to the
+    	      BIG-IP system.
+        default: 5
     state:
         description:
             - Specifies the state of the component on the BIG-IP system.
         default: present
         choices: ['absent', 'present']
-    time_until_up:
-        description:
-            - Specifies the amount of time, in seconds, after the first successful response before a node is marked up.
-        default: 0
     timeout:
         description:
             - Specifies the number of seconds the target has in which to respond to the monitor request.
-        default: 16
+        default: 31
     up_interval:
         description:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when the resource is up.
@@ -145,24 +124,17 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_common_f5.f5_bigip import *
 
 BIGIP_GTM_MONITOR_FTP_ARGS = dict(
-    adaptive=dict(type='str', choices=F5_ACTIVATION_CHOICES),
-    adaptive_divergence_type=dict(type='str', choices=['relative', 'absolute']),
-    adaptive_divergence_value=dict(type='int'),
-    adaptive_limit=dict(type='int'),
-    adaptive_sampling_timespan=dict(type='int'),
-    app_service=dict(type='str'),
     debug=dict(type='str', choices=F5_POLAR_CHOICES),
     defaults_from=dict(type='str'),
     description=dict(type='str'),
     destination=dict(type='str'),
     filename=dict(type='str'),
+    ignore_down_response=dict(type='str', chocies=F5_ACTIVATION_CHOICES),
     interval=dict(type='int'),
-    manual_resume=dict(type='str', choices=F5_ACTIVATION_CHOICES),
     mode=dict(type='str', choices=['passive', 'port']),
     password=dict(type='str', no_log=True),
-    time_until_up=dict(type='int'),
+    probe_timeout=dict(type='int'),
     timeout=dict(type='int'),
-    up_interval=dict(type='int'),
     username=dict(type='str')
 )
 
