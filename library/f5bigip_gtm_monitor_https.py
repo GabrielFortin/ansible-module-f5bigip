@@ -32,7 +32,7 @@ author:
 options:
     cert:
         description:
-            - Specifies a file object for a client certificate that the monitor sends to the target SSL server.
+            - Specifies a fully-qualified path for a client certificate that the monitor sends to the target SSL server.
     cipherlist:
         description:
             - Specifies the list of ciphers for this monitor.
@@ -40,15 +40,15 @@ options:
     compatibility:
         description:
             - Specifies, when enabled, that the SSL options setting (in OpenSSL) is set to ALL.
-        default: enabled.
+        default: enabled
         choices: ['enabled', 'disabled']
     defaults_from:
         description:
             - Specifies the name of the monitor from which you want your custom monitor to inherit settings.
-        default: http
+        default: https
     description:
         description:
-            - Specifies descriptive text that identifies the component.
+            - User defined description.
     destination:
         description:
             - Specifies the IP address and service port of the resource that is the destination of this monitor.
