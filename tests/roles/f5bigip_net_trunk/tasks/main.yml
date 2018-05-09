@@ -1,0 +1,105 @@
+---
+
+- name: Create NET Trunk
+  f5bigip_net_trunk:
+    f5_hostname: "{{ bigip_host }}"
+    f5_username: "{{ bigip_username }}"
+    f5_password: "{{ bigip_password }}"
+    f5_port: "{{ bigip_port }}"
+    name: "{{ trunk_name }}"
+    partition: "{{ bigip_partition }}"
+    description: "{{ trunk_description }}"
+    state: present
+  delegate_to: localhost
+  register: result
+
+- name: Assert Create NET Trunk
+  assert:
+    that:
+      - result|changed
+
+- name: Create NET Trunk (idempotent)
+  f5bigip_net_trunk:
+    f5_hostname: "{{ bigip_host }}"
+    f5_username: "{{ bigip_username }}"
+    f5_password: "{{ bigip_password }}"
+    f5_port: "{{ bigip_port }}"
+    name: "{{ trunk_name }}"
+    partition: "{{ bigip_partition }}"
+    description: "{{ trunk_description }}"
+    state: present
+  delegate_to: localhost
+  register: result
+
+- name: Assert Create NET Trunk (idempotent)
+  assert:
+    that:
+      - not result|changed
+
+- name: Change NET Trunk description
+  f5bigip_net_trunk:
+    f5_hostname: "{{ bigip_host }}"
+    f5_username: "{{ bigip_username }}"
+    f5_password: "{{ bigip_password }}"
+    f5_port: "{{ bigip_port }}"
+    name: "{{ trunk_name }}"
+    partition: "{{ bigip_partition }}"
+    description: "new {{ trunk_description }}"
+  delegate_to: localhost
+  register: result
+
+- name: Change NET Trunk description
+  assert:
+    that:
+      - result|changed
+
+- name: Change NET Trunk description (idempotent)
+  f5bigip_net_trunk:
+    f5_hostname: "{{ bigip_host }}"
+    f5_username: "{{ bigip_username }}"
+    f5_password: "{{ bigip_password }}"
+    f5_port: "{{ bigip_port }}"
+    name: "{{ trunk_name }}"
+    partition: "{{ bigip_partition }}"
+    description: "new {{ trunk_description }}"
+  delegate_to: localhost
+  register: result
+
+- name: Change NET Trunk description (idempotent)
+  assert:
+    that:
+      - not result|changed
+
+- name: Delete NET Trunk
+  f5bigip_net_trunk:
+    f5_hostname: "{{ bigip_host }}"
+    f5_username: "{{ bigip_username }}"
+    f5_password: "{{ bigip_password }}"
+    f5_port: "{{ bigip_port }}"
+    name: "{{ trunk_name }}"
+    partition: "{{ bigip_partition }}"
+    state: absent
+  delegate_to: localhost
+  register: result
+
+- name: Assert Delete NET Trunk
+  assert:
+    that:
+      - result|changed
+
+- name: Delete NET Trunk (idempotent)
+  f5bigip_net_trunk:
+    f5_hostname: "{{ bigip_host }}"
+    f5_username: "{{ bigip_username }}"
+    f5_password: "{{ bigip_password }}"
+    f5_port: "{{ bigip_port }}"
+    name: "{{ trunk_name }}"
+    partition: "{{ bigip_partition }}"
+    state: absent
+  delegate_to: localhost
+  register: result
+
+- name: Assert Delete NET Trunk (idempotent)
+  assert:
+    that:
+      - not result|changed
