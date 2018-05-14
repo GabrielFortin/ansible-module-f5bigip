@@ -23,29 +23,17 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: f5bigip_gtm_monitor_gateway_icmp
-short_description: BIG-IP gtm https monitor module
+short_description: BIG-IP gtm monitor gateway-icmp monitor module
 description:
-    - Configures a Hypertext Transfer Protocol over Secure Socket Layer (HTTPS) monitor.
+    - Configures a Gateway Internet Control Message Protocol (ICMP) monitor.
 version_added: "2.4"
 author:
     - "Gabriel Fortin (@GabrielFortin)"
 options:
-    cert:
-        description:
-            - Specifies a fully-qualified path for a client certificate that the monitor sends to the target SSL server.
-    cipherlist:
-        description:
-            - Specifies the list of ciphers for this monitor.
-        default: DEFAULT:+SHA:+3DES:+kEDH
-    compatibility:
-        description:
-            - Specifies, when enabled, that the SSL options setting (in OpenSSL) is set to ALL.
-        default: enabled
-        choices: ['enabled', 'disabled']
     defaults_from:
         description:
             - Specifies the name of the monitor from which you want your custom monitor to inherit settings.
-        default: https
+        default: gateway_icmp
     description:
         description:
             - User defined description.
@@ -63,9 +51,6 @@ options:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when either the resource
               is down or the status of the resource is unknown.
         default: 30
-    key:
-        description:
-            - Specifies the RSA private key if the monitored target requires authentication.
     name:
         description:
             - Specifies a unique name for the component.
@@ -74,25 +59,19 @@ options:
         description:
             - Specifies the administrative partition in which the component object resides.
         default: Common
-    password:
+    probe_attempts:
         description:
-            - Specifies the password if the monitored target requires authentication.
+            - Specifies the number of times the BIG-IP system attempts to probe the host server, after which the
+              BIG-IP system considers the host server down or unavailable.
+        default: 3
+    probe_interval:
+        description:
+            - Specifies the frequency at which the BIG-IP system probes the host server.
+        default: 1
     probe_timeout:
         description:
             - Specifies the number of seconds after which the BIG-IP system times out the probe request to the BIG-IP system.
         default: 5
-    recv:
-        description:
-            - Specifies the text string that the monitor looks for in the returned resource.
-    reverse:
-        description:
-            - Specifies whether the monitor operates in reverse mode.
-        default: disabled
-        choices: ['enabled', 'disabled']
-    send:
-        description:
-            - Specifies the text string that the monitor sends to the target object.
-        default: GET /
     state:
         description:
             - Specifies the state of the component on the BIG-IP system.
@@ -107,9 +86,6 @@ options:
             - Specifies whether the monitor operates in transparent mode.
         default: disabled
         choices: ['enabled', 'disabled']
-    username:
-        description:
-            - Specifies the username, if the monitored target requires authentication.
 notes:
     - Requires BIG-IP software version >= 11.6
 requirements:
@@ -137,23 +113,16 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_common_f5.f5_bigip import *
 
 BIGIP_GTM_MONITOR_GATEWAY_ICMP_ARGS = dict(
-    cert=dict(type='str'),
-    cipherlist=dict(type='str'),
-    compatibility=dict(type='str', choices=F5_ACTIVATION_CHOICES),
     defaults_from=dict(type='str'),
     description=dict(type='str'),
     destination=dict(type='str'),
     ignore_down_response=dict(type='str', choices=F5_ACTIVATION_CHOICES),
     interval=dict(type='int'),
-    key=dict(type='str'),
-    password=dict(type='str', no_log=True),
+    probe_attemps=dict(type='int'),
+    probe_interval=dict(type='int'),
     probe_timeout=dict(type='int'),
-    recv=dict(type='str'),
-    reverse=dict(type='str', choices=F5_ACTIVATION_CHOICES),
-    send=dict(type='str'),
     timeout=dict(type='int'),
-    transparent=dict(type='str', choices=F5_ACTIVATION_CHOICES),
-    username=dict(type='str')
+    transparent=dict(type='str', choices=F5_ACTIVATION_CHOICES)
 )
 
 
