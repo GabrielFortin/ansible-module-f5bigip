@@ -22,30 +22,18 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: f5bigip_gtm_monitor_https
-short_description: BIG-IP gtm https monitor module
+module: f5bigip_gtm_monitor_http
+short_description: BIG-IP gtm http monitor module
 description:
-    - Configures a Hypertext Transfer Protocol over Secure Socket Layer (HTTPS) monitor.
+    - Configures a Hypertext Transfer Protocol (HTTP) monitor.
 version_added: "2.4"
 author:
     - "Gabriel Fortin (@GabrielFortin)"
 options:
-    cert:
-        description:
-            - Specifies a fully-qualified path for a client certificate that the monitor sends to the target SSL server.
-    cipherlist:
-        description:
-            - Specifies the list of ciphers for this monitor.
-        default: DEFAULT:+SHA:+3DES:+kEDH
-    compatibility:
-        description:
-            - Specifies, when enabled, that the SSL options setting (in OpenSSL) is set to ALL.
-        default: enabled
-        choices: ['enabled', 'disabled']
     defaults_from:
         description:
             - Specifies the name of the monitor from which you want your custom monitor to inherit settings.
-        default: https
+        default: http
     description:
         description:
             - User defined description.
@@ -63,9 +51,6 @@ options:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when either the resource
               is down or the status of the resource is unknown.
         default: 30
-    key:
-        description:
-            - Specifies the RSA private key if the monitored target requires authentication.
     name:
         description:
             - Specifies a unique name for the component.
@@ -124,7 +109,7 @@ EXAMPLES = '''
     f5_username: admin
     f5_password: admin
     f5_port: 443
-    name: my_https_monitor
+    name: my_http_monitor
     partition: Common
     state: present
   delegate_to: localhost
@@ -137,15 +122,11 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_common_f5.f5_bigip import *
 
 BIGIP_GTM_MONITOR_HTTP_ARGS = dict(
-    cert=dict(type='str'),
-    cipherlist=dict(type='str'),
-    compatibility=dict(type='str', choices=F5_ACTIVATION_CHOICES),
     defaults_from=dict(type='str'),
     description=dict(type='str'),
     destination=dict(type='str'),
     ignore_down_response=dict(type='str', choices=F5_ACTIVATION_CHOICES),
     interval=dict(type='int'),
-    key=dict(type='str'),
     password=dict(type='str', no_log=True),
     probe_timeout=dict(type='int'),
     recv=dict(type='str'),
