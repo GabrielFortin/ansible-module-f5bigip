@@ -30,9 +30,6 @@ version_added: "2.4"
 author:
     - "Gabriel Fortin (@GabrielFortin)"
 options:
-    app_service:
-        description:
-            - Specifies the name of the application service to which the monitor belongs
     debug:
         description:
             - Specifies whether the monitor sends error messages and additional information to a log file created and
@@ -49,24 +46,27 @@ options:
     destination:
         description:
             - Specifies the IP address and service port of the resource that is the destination of this monitor.
+    ignore_down_response:
+        description:
+            - Specifies whether the monitor ignores a down response from the system it is monitoring.
+        default: disabled
+        choices: ['disabled', 'enabled']
     interval:
         description:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when either the resource
               is down or the status of the resource is unknown.
         default: 10
-    manual_resume:
+    nas_ip_address:
         description:
-            - Specifies whether the system automatically changes the status of a resource to up at the next successful
-              monitor check.
-        default: disabled
-        choices: ['disabled', 'enabled']
+            - Specifies the network access server IP address that the system uses to identify itself to the RADIUS
+              server.
     name:
         description:
             - Specifies a unique name for the component.
         required: true
     nas_ip_address:
         description:
-            - Specifies the network access server IP address that the system uses to identify itself to the RADIUS
+            - Specifies the network access server IP address that the system uses to identify itself to the RADIUS.
               server.
     partition:
         description:
@@ -74,30 +74,27 @@ options:
         default: Common
     password:
         description:
-            - Specifies the password if the monitored target requires authentication
+            - Specifies the password if the monitored target requires authentication.
+    probe_timeout:
+        description:
+            - Specifies the number of seconds after which the BIG-IP system times out the probe request to the BIG-IP
+              system.
+        default: 5
     secret:
         description:
-            - Specifies the secret the monitor must use when contacting the resource
+            - Specifies the secret the monitor must use when contacting the resource.
     state:
         description:
             - Specifies the state of the component on the BIG-IP system.
         default: present
         choices: ['absent', 'present']
-    time_until_up:
-        description:
-            - Specifies the amount of time, in seconds, after the first successful response before a node is marked up.
-        default: 0
     timeout:
         description:
             - Specifies the number of seconds the target has in which to respond to the monitor request.
         default: 31
-    up_interval:
-        description:
-            - Specifies, in seconds, the frequency at which the system issues the monitor check when the resource is up.
-        default: 0
     username:
         description:
-            - Specifies the username, if the monitored target requires authentication
+            - Specifies the username, if the monitored target requires authentication.
 notes:
     - Requires BIG-IP software version >= 11.6
 requirements:
@@ -106,7 +103,7 @@ requirements:
 '''
 
 EXAMPLES = '''
-- name: Create LTM Monitor RADIUS
+- name: Create GTM Monitor RADIUS
   f5bigip_gtm_monitor_radius:
     f5_hostname: 172.16.227.35
     f5_username: admin
@@ -125,7 +122,7 @@ RETURN = '''
 from ansible.module_utils.basic import AnsibleModule
 from ansible_common_f5.f5_bigip import *
 
-BIGIP_LTM_MONITOR_RADIUS_ARGS = dict(
+BIGIP_GTM_MONITOR_RADIUS_ARGS = dict(
     debug=dict(type='str', choices=F5_POLAR_CHOICES),
     defaults_from=dict(type='str'),
     description=dict(type='str'),
@@ -153,7 +150,7 @@ class F5BigIpLtmMonitorRadius(F5BigIpNamedObject):
 
 
 def main():
-    module = AnsibleModuleF5BigIpNamedObject(argument_spec=BIGIP_LTM_MONITOR_RADIUS_ARGS, supports_check_mode=False)
+    module = AnsibleModuleF5BigIpNamedObject(argument_spec=BIGIP_GTM_MONITOR_RADIUS_ARGS, supports_check_mode=False)
 
     try:
         obj = F5BigIpLtmMonitorRadius(check_mode=module.supports_check_mode, **module.params)
