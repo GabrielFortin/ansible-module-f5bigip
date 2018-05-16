@@ -157,7 +157,7 @@ BIGIP_GTM_MONITOR_SIP_ARGS = dict(
 )
 
 
-class F5BigIpLtmMonitorSip(F5BigIpNamedObject):
+class F5BigIpGtmMonitorSip(F5BigIpNamedObject):
     def set_crud_methods(self):
         self.methods = {
             'create': self.mgmt_root.tm.gtm.monitor.sips.sip.create,
@@ -172,7 +172,7 @@ def main():
     module = AnsibleModuleF5BigIpNamedObject(argument_spec=BIGIP_GTM_MONITOR_SIP_ARGS, supports_check_mode=False)
 
     try:
-        obj = F5BigIpLtmMonitorSip(check_mode=module.supports_check_mode, **module.params)
+        obj = F5BigIpGtmMonitorSip(check_mode=module.supports_check_mode, **module.params)
         result = obj.flush()
         module.exit_json(**result)
     except Exception as exc:

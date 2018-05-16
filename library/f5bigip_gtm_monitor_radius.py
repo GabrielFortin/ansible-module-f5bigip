@@ -138,7 +138,7 @@ BIGIP_GTM_MONITOR_RADIUS_ARGS = dict(
 )
 
 
-class F5BigIpLtmMonitorRadius(F5BigIpNamedObject):
+class F5BigIpGtmMonitorRadius(F5BigIpNamedObject):
     def set_crud_methods(self):
         self.methods = {
             'create': self.mgmt_root.tm.gtm.monitor.radius_s.radius.create,
@@ -153,7 +153,7 @@ def main():
     module = AnsibleModuleF5BigIpNamedObject(argument_spec=BIGIP_GTM_MONITOR_RADIUS_ARGS, supports_check_mode=False)
 
     try:
-        obj = F5BigIpLtmMonitorRadius(check_mode=module.supports_check_mode, **module.params)
+        obj = F5BigIpGtmMonitorRadius(check_mode=module.supports_check_mode, **module.params)
         result = obj.flush()
         module.exit_json(**result)
     except Exception as exc:
