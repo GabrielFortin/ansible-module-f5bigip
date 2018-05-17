@@ -119,6 +119,7 @@ EXAMPLES = '''
 RETURN = ''' # '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible_common_f5.base import F5_ACTIVATION_CHOICES
 from ansible_common_f5.base import F5_NAMED_OBJ_ARGS
 from ansible_common_f5.base import F5_PROVIDER_ARGS
 from ansible_common_f5.bigip import F5BigIpNamedObject
