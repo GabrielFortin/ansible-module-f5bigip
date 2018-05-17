@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 #
 # Copyright 2016-2018, Eric Jacob <erjac77@gmail.com>
 #
@@ -38,7 +39,7 @@ requirements:
 '''
 
 EXAMPLES = '''
-- name: Get CM failover status of the device
+- name: Gets the failover status of the device
   f5bigip_cm_failover_status:
     f5_hostname: 172.16.227.35
     f5_username: admin
@@ -47,48 +48,84 @@ EXAMPLES = '''
   delegate_to: localhost
   register: result
 
-- name: Display the failover status of the device
+- name: Displays the failover status of the device
   debug:
-    msg: "Failover Status: {{ result.failover_status }}"
+    msg: "Failover Status: {{ result.status }}"
 '''
 
 RETURN = '''
+color:
+    description: The color representing the failover status of the device
+    returned: success
+    type: string
+    sample:
+        - green
+status:
+    description: The failover status of the device
+    returned: success
+    type: string
+    sample:
+        - ACTIVE
+        - STANDBY
+summary:
+    description: A summary message explaining the failover status of the device
+    returned: success
+    type: string
+    sample:
+        - 1/1 active
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_common_f5.f5_bigip import *
+from ansible_common_f5.base import AnsibleF5Error
+from ansible_common_f5.base import F5_PROVIDER_ARGS
+from ansible_common_f5.bigip import F5BigIpUnnamedObject
 
-BIGIP_CM_FAILOVER_STATUS_ARGS = dict(
-)
+
+class ModuleParams(object):
+    @property
+    def argument_spec(self):
+        argument_spec = dict()
+        argument_spec.update(F5_PROVIDER_ARGS)
+        return argument_spec
+
+    @property
+    def supports_check_mode(self):
+        return False
 
 
 class F5BigIpCmFailoverStatus(F5BigIpUnnamedObject):
-    def set_crud_methods(self):
-        self.methods = {
-            'read': self.mgmt_root.tm.cm.failover_status
+    def _set_crud_methods(self):
+        self._methods = {
+            'read': self._api.tm.cm.failover_status
         }
 
-    def get_failover_status(self):
-        failover_status_desc = {}
-        failover_status = self.methods['read']
+    def flush(self):
+        result = dict(changed=False)
 
-        if failover_status._meta_data['uri'].endswith("/mgmt/tm/cm/failover-status/"):
+        try:
+            failover_status = self._methods['read']
             failover_status.refresh()
-            failover_status_desc = \
-                failover_status.entries['https://localhost/mgmt/tm/cm/failover-status/0']['nestedStats']['entries'][
-                    'status']['description']
-        else:
+            failover_status_stats = \
+                failover_status.entries['https://localhost/mgmt/tm/cm/failover-status/0']['nestedStats']['entries']
+        except Exception:
             raise AnsibleF5Error("Unable to retrieve the failover status of the device.")
 
-        return {'failover_status': failover_status_desc}
+        result.update(
+            color=failover_status_stats['color']['description'],
+            status=failover_status_stats['status']['description'],
+            summary=failover_status_stats['summary']['description']
+        )
+
+        return result
 
 
 def main():
-    module = AnsibleModuleF5BigIpUnnamedObject(argument_spec=BIGIP_CM_FAILOVER_STATUS_ARGS, supports_check_mode=False)
+    params = ModuleParams()
+    module = AnsibleModule(argument_spec=params.argument_spec, supports_check_mode=params.supports_check_mode)
 
     try:
-        obj = F5BigIpCmFailoverStatus(check_mode=module.supports_check_mode, **module.params)
-        result = obj.get_failover_status()
+        obj = F5BigIpCmFailoverStatus(check_mode=module.check_mode, **module.params)
+        result = obj.flush()
         module.exit_json(**result)
     except Exception as exc:
         module.fail_json(msg=str(exc))
