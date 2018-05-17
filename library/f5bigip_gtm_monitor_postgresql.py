@@ -165,6 +165,7 @@ class ModuleParams(object):
     def supports_check_mode(self):
         return False
 
+
 class F5BigIpGtmMonitorPostgresql(F5BigIpNamedObject):
     def _set_crud_methods(self):
         self._methods = {
