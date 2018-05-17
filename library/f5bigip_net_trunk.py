@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 #
 # Copyright 2016-2018, Eric Jacob <erjac77@gmail.com>
 #
@@ -115,45 +116,58 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = '''
-'''
+RETURN = ''' # '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_common_f5.f5_bigip import *
+from ansible_common_f5.base import F5_ACTIVATION_CHOICES
+from ansible_common_f5.base import F5_NAMED_OBJ_ARGS
+from ansible_common_f5.base import F5_PROVIDER_ARGS
+from ansible_common_f5.bigip import F5BigIpNamedObject
 
-BIGIP_NET_TRUNK_ARGS = dict(
-    app_service=dict(type='str'),
-    bandwidth=dict(type='int'),
-    description=dict(type='str'),
-    distribution_hash=dict(type='str', choices=['dst-mac', 'src-dst-ipport', 'src-dst-mac']),
-    interfaces=dict(type='list'),
-    lacp=dict(type='str', choices=F5_ACTIVATION_CHOICES),
-    lacp_mode=dict(type='str', choices=['active', 'passive']),
-    lacp_timeout=dict(type='str', choices=['short', 'long']),
-    link_select_policy=dict(type='str', choices=['auto', 'maximum-bandwidth']),
-    mac_address=dict(type='str'),
-    stp=dict(type='str', choices=F5_ACTIVATION_CHOICES),
-    stp_reset=dict(type='str'),
-    qinq_ethertype=dict(type='str')
-)
 
+class ModuleParams(object):
+    @property
+    def argument_spec(self):
+        argument_spec = dict(
+            app_service=dict(type='str'),
+            bandwidth=dict(type='int'),
+            description=dict(type='str'),
+            distribution_hash=dict(type='str', choices=['dst-mac', 'src-dst-ipport', 'src-dst-mac']),
+            interfaces=dict(type='list'),
+            lacp=dict(type='str', choices=F5_ACTIVATION_CHOICES),
+            lacp_mode=dict(type='str', choices=['active', 'passive']),
+            lacp_timeout=dict(type='str', choices=['short', 'long']),
+            link_select_policy=dict(type='str', choices=['auto', 'maximum-bandwidth']),
+            mac_address=dict(type='str'),
+            stp=dict(type='str', choices=F5_ACTIVATION_CHOICES),
+            stp_reset=dict(type='str'),
+            qinq_ethertype=dict(type='str')
+        )
+        argument_spec.update(F5_PROVIDER_ARGS)
+        argument_spec.update(F5_NAMED_OBJ_ARGS)
+        return argument_spec
+
+    @property
+    def supports_check_mode(self):
+        return False
 
 class F5BigIpNetTrunk(F5BigIpNamedObject):
-    def set_crud_methods(self):
-        self.methods = {
-            'create': self.mgmt_root.tm.net.trunks.trunk.create,
-            'read': self.mgmt_root.tm.net.trunks.trunk.load,
-            'update': self.mgmt_root.tm.net.trunks.trunk.update,
-            'delete': self.mgmt_root.tm.net.trunks.trunk.delete,
-            'exists': self.mgmt_root.tm.net.trunks.trunk.exists
+    def _set_crud_methods(self):
+        self._methods = {
+            'create': self._api.tm.net.trunks.trunk.create,
+            'read': self._api.tm.net.trunks.trunk.load,
+            'update': self._api.tm.net.trunks.trunk.update,
+            'delete': self._api.tm.net.trunks.trunk.delete,
+            'exists': self._api.tm.net.trunks.trunk.exists
         }
 
 
 def main():
-    module = AnsibleModuleF5BigIpNamedObject(argument_spec=BIGIP_NET_TRUNK_ARGS, supports_check_mode=False)
+    params = ModuleParams()
+    module = AnsibleModule(argument_spec=params.argument_spec, supports_check_mode=params.supports_check_mode)
 
     try:
-        obj = F5BigIpNetTrunk(check_mode=module.supports_check_mode, **module.params)
+        obj = F5BigIpNetTrunk(check_mode=module.check_mode, **module.params)
         result = obj.flush()
         module.exit_json(**result)
     except Exception as exc:
