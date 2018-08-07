@@ -47,6 +47,7 @@ options:
     destination:
         description:
             - Specifies the IP address and service port of the resource that is the destination of this monitor.
+        default: '*:*'
     folder:
         description:
             - Specifies the name of the folder on the IMAP server that the monitor tries to open.
@@ -93,9 +94,8 @@ options:
     username:
         description:
             - Specifies the username, if the monitored target requires authentication.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

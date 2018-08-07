@@ -55,6 +55,7 @@ options:
     destination:
         description:
             - Specifies the IP address and service port of the resource that is the destination of this monitor.
+        default: '*:*'
     filter:
         description:
             - Specifies an LDAP key for which the monitor searches.
@@ -104,9 +105,8 @@ options:
     username:
         description:
             - Specifies the username, if the monitored target requires authentication.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

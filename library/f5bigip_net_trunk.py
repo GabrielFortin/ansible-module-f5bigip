@@ -96,9 +96,8 @@ options:
         description:
             - Specifies the ether-type value used for the packets handled on this trunk when it is a member in a QinQ
               vlan.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

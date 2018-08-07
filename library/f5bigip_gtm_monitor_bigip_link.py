@@ -44,6 +44,7 @@ options:
     destination:
         description:
             - Specifies the IP address and service port of the resource that is the destination of this monitor.
+        default: '*:*'
     ignore_down_response:
         description:
             - Specifies whether the monitor ignores a down response from the system it is monitoring.
@@ -75,9 +76,8 @@ options:
         description:
             - Specifies the number of seconds the target has in which to respond to the monitor request.
         default: 16
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''
