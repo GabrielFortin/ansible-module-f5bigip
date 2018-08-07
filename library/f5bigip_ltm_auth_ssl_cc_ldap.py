@@ -117,9 +117,8 @@ options:
         description:
             - Specifies a space-delimited list of the valid roles that clients must have to be authorized.
         required: true
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''
@@ -133,7 +132,7 @@ EXAMPLES = '''
     f5_port: 443
     name: my_ssl_cc_ldap
     partition: Common
-    servers: 
+    servers:
       - localhost
     user_key: Key
     state: present

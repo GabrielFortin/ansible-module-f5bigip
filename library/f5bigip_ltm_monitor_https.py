@@ -67,7 +67,7 @@ options:
     defaults_from:
         description:
             - Specifies the name of the monitor from which you want your custom monitor to inherit settings.
-        default: http
+        default: https
     description:
         description:
             - Specifies descriptive text that identifies the component.
@@ -144,9 +144,8 @@ options:
     username:
         description:
             - Specifies the username, if the monitored target requires authentication.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

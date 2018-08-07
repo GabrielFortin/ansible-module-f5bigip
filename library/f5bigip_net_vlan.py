@@ -98,7 +98,31 @@ options:
         description:
             - Specifies the administrative partition in which the component object resides.
         default: Common
-    source-checking:
+    sflow:
+        description:
+            - Specifies sFlow settings for the HTTP profile.
+        suboptions:
+            poll_interval:
+                description:
+                    - Specifies the maximum interval in seconds between two pollings.
+                default: 0
+            poll_interval_global:
+                description:
+                    - Specifies whether the global HTTP poll-interval setting, which is available under sys sflow
+                      global-settings module, overrides the object-level poll-interval setting.
+                default: yes
+                choices: ['no', 'yes']
+            sampling_rate:
+                description:
+                    - Specifies the ratio of packets observed to the samples generated.
+                default: 0
+            sampling_rate_global:
+                description:
+                    - Specifies whether the global HTTP sampling-rate setting, which is available under sys sflow
+                      global-settings module, overrides the object-level sampling-rate setting.
+                default: yes
+                choices: ['no', 'yes']
+    source_checking:
         description:
             - Specifies that only connections that have a return route in the routing table are accepted.
         default: disabled
@@ -111,9 +135,8 @@ options:
     tag:
         description:
             - Specifies a number that the system adds into the header of any frame passing through the VLAN.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

@@ -62,7 +62,8 @@ options:
         default: Common
     probe_timeout:
         description:
-            - Specifies the number of seconds after which the BIG-IP system times out the probe request to the BIG-IP system.
+            - Specifies the number of seconds after which the BIG-IP system times out the probe request to the BIG-IP
+              system.
         default: 5
     recv:
         description:
@@ -90,9 +91,8 @@ options:
             - Specifies whether the monitor operates in transparent mode.
         default: disabled
         choices: ['enabled', 'disabled']
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

@@ -85,7 +85,7 @@ options:
         description:
             - Specifies option of not overwriting a key if it is in the scope.
         default: true
-        choices: [true, false]
+        type: bool
     partition:
         description:
             - Displays the administrative partition in which the component object resides.
@@ -101,9 +101,8 @@ options:
     subject_alternative_name:
         description:
             - Specifies standard X.509 extensions as shown in RFC 2459.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

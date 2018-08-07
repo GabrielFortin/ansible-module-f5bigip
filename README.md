@@ -8,8 +8,8 @@ An Ansible module to perform specific operational and configuration tasks on F5 
 ## REQUIREMENTS
 
 * Ansible >= 2.4.0 (ansible)
-* F5 Common Utility Module for Ansible >= 0.11.0 ([ansible-common-f5](https://github.com/erjac77/ansible-common-f5))
-* F5 Python SDK >= 3.0.14 (f5-sdk)
+* F5 Common Utility Module for Ansible >= 1.0.0 ([ansible-common-f5](https://github.com/erjac77/ansible-common-f5))
+* F5 Python SDK >= 3.0.15 (f5-sdk)
 
 ## INSTALLATION
 
@@ -25,11 +25,11 @@ pip install git+https://github.com/erjac77/ansible-common-f5.git#egg=ansible-com
 ansible-galaxy install erjac77.module-f5bigip
 ```
 
+For alternative installation methods, see the [Wiki](https://github.com/erjac77/ansible-module-f5bigip/wiki/Alternative-Installation-Methods).
+
 ## EXAMPLE PLAYBOOK
 
 ```yaml
----
-
 - hosts: bigips
   connection: local
   roles:
@@ -49,6 +49,8 @@ ansible-galaxy install erjac77.module-f5bigip
         load_balancing_mode: least-connections-members
         state: present
 ```
+
+You'll find more examples in the [Wiki](https://github.com/erjac77/ansible-module-f5bigip/wiki/Playbook-Examples).
 
 ## LICENSE
 

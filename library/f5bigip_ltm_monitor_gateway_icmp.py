@@ -55,7 +55,7 @@ options:
     defaults_from:
         description:
             - Specifies the name of the monitor from which you want your custom monitor to inherit settings.
-        default: http
+        default: gateway_icmp
     description:
         description:
             - Specifies descriptive text that identifies the component.
@@ -104,9 +104,8 @@ options:
         description:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when the resource is up.
         default: 0
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''

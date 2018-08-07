@@ -36,7 +36,7 @@ options:
             - Specifies the name of the application service to which the profile belongs.
     defaults_from:
         description:
-            - Specifies the profile that you want to use as the parent profile. 
+            - Specifies the profile that you want to use as the parent profile.
     description:
         description:
             - User defined description.
@@ -63,7 +63,12 @@ options:
             - Specifies the state of the component on the BIG-IP system.
         default: present
         choices: ['absent', 'present']
+requirements:
+    - BIG-IP >= 12.0
+    - ansible-common-f5
+    - f5-sdk
 '''
+
 EXAMPLES = '''
 - name: Create LTM TFTP Profile
   f5bigip_ltm_profile_tftp:

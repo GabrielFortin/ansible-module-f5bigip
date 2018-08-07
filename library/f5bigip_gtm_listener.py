@@ -104,6 +104,14 @@ options:
         description:
             - Specifies the type of source address translation enabled for the listener as well as the pool that the
               source address translation will use.
+        suboptions:
+            pool:
+                description:
+                    - Specifies the name of a SNAT pool used by the specified listener.
+            type:
+                description:
+                    - Specifies the type of source address translation associated with the specified listener.
+                choices: ['automap', 'none', 'snat']
     source_port:
         description:
             - Specifies whether the system preserves the source port of the connection.
@@ -134,9 +142,8 @@ options:
     vlans_enabled:
         description:
             - Specifies that traffic will be accepted by this listener only on the VLANS specified in the vlans option.
-notes:
-    - Requires BIG-IP software version >= 11.6
 requirements:
+    - BIG-IP >= 12.0
     - ansible-common-f5
     - f5-sdk
 '''
@@ -152,9 +159,9 @@ EXAMPLES = '''
     partition: Common
     description: My listener
     address: 10.10.1.1
-    persist: 
+    persist:
       - { name: dest_addr, partition: Common, tmDefault: 'yes' }
-    source_address_translation: 
+    source_address_translation:
       type: automap
     state: present
   delegate_to: localhost
@@ -229,7 +236,7 @@ class F5BigIpGtmListener(F5BigIpNamedObject):
     def source_address_translation(self):
         if self._params['sourceAddressTranslation']:
             if self._params['sourceAddressTranslation']['type'] == 'automap' and 'pool' in self._params[
-                'sourceAddressTranslation']:
+                    'sourceAddressTranslation']:
                 raise AnsibleF5Error("Cannot specify a pool when using automap.")
         else:
             return None
