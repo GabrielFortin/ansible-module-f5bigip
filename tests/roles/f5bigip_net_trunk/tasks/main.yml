@@ -10,7 +10,6 @@
     partition: "{{ bigip_partition }}"
     description: "{{ trunk_description }}"
     state: present
-  delegate_to: localhost
   register: result
 
 - name: Assert Create NET Trunk
@@ -28,7 +27,6 @@
     partition: "{{ bigip_partition }}"
     description: "{{ trunk_description }}"
     state: present
-  delegate_to: localhost
   register: result
 
 - name: Assert Create NET Trunk (idempotent)
@@ -45,7 +43,6 @@
     name: "{{ trunk_name }}"
     partition: "{{ bigip_partition }}"
     description: "new {{ trunk_description }}"
-  delegate_to: localhost
   register: result
 
 - name: Change NET Trunk description
@@ -62,7 +59,6 @@
     name: "{{ trunk_name }}"
     partition: "{{ bigip_partition }}"
     description: "new {{ trunk_description }}"
-  delegate_to: localhost
   register: result
 
 - name: Change NET Trunk description (idempotent)
@@ -79,7 +75,6 @@
     name: "{{ trunk_name }}"
     partition: "{{ bigip_partition }}"
     state: absent
-  delegate_to: localhost
   register: result
 
 - name: Assert Delete NET Trunk
@@ -96,7 +91,6 @@
     name: "{{ trunk_name }}"
     partition: "{{ bigip_partition }}"
     state: absent
-  delegate_to: localhost
   register: result
 
 - name: Assert Delete NET Trunk (idempotent)
