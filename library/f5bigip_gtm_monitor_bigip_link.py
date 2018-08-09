@@ -26,7 +26,7 @@ DOCUMENTATION = '''
 module: f5bigip_gtm_monitor_bigip_link
 short_description: BIG-IP gtm monitor bigip_link module
 description:
-    - Configures an bigip_link monitor.
+    - Configures a BIG-IP Link monitor.
 version_added: "2.4"
 author:
     - "Gabriel Fortin (@GabrielFortin)"
@@ -54,7 +54,7 @@ options:
         description:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when either the resource
               is down or the status of the resource is unknown.
-        default: 5
+        default: 10
     name:
         description:
             - Specifies a unique name for the component.
@@ -63,10 +63,6 @@ options:
         description:
             - Specifies the administrative partition in which the component object resides.
         default: Common
-    run:
-        description:
-            - Specifies the path and file name of a program to run as the bigip_link monitor, for example
-              /config/monitors/myMonitor.
     state:
         description:
             - Specifies the state of the component on the BIG-IP system.
@@ -75,7 +71,7 @@ options:
     timeout:
         description:
             - Specifies the number of seconds the target has in which to respond to the monitor request.
-        default: 16
+        default: 30
 requirements:
     - BIG-IP >= 12.0
     - ansible-common-f5

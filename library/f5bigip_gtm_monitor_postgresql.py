@@ -76,7 +76,7 @@ options:
     password:
         description:
             - Specifies the password if the monitored target requires authentication.
-        required: none
+        default: none
     probe_timeout:
         description:
             - Specifies the number of seconds after which the BIG-IP(r) system times out the probe request to the
