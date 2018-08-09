@@ -54,7 +54,7 @@ options:
         description:
             - Specifies, in seconds, the frequency at which the system issues the monitor check when either the resource
               is down or the status of the resource is unknown.
-        default: 5
+        default: 30
     name:
         description:
             - Specifies a unique name for the component.
@@ -79,7 +79,7 @@ options:
     timeout:
         description:
             - Specifies the number of seconds the target has in which to respond to the monitor request.
-        default: 16
+        default: 120
     user_defined:
         description:
             - Specifies any user-defined command-line arguments and variables that the external program requires.
